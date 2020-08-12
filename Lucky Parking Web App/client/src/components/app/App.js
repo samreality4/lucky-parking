@@ -3,6 +3,7 @@ import MainMap from "./Map";
 import Geosearch from "./Geosearch";
 import Header from "./Header"
 import Sidebar from "./Sidebar"
+import HeatMap from "./map/HeatMap";
 
 import '../../sass/main.scss';
 
@@ -12,7 +13,8 @@ function App() {
       <Header />
       <Sidebar />
       <Geosearch />
-      <MainMap />
+      {/* <MainMap /> */}
+      <HeatMap/>
     </div>
   );
 }
