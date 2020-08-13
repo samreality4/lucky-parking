@@ -1,8 +1,8 @@
 //// Heat Map Layer////
 export const heatMap = {
-  id: "citation-heat",
+  id: "heat",
   type: "heatmap",
-  source: "places",
+  source: "heat",
   maxzoom: 13,
   paint: {
     // increase weight as diameter breast height increases
@@ -68,8 +68,8 @@ export const places = {
 
 ////Meter Layer////
 export const meters = {
-  id: "meter",
-  source: "meter",
+  id: "meters",
+  source: "meters",
   type: "line",
   "source-layer": "meter_lines-1l60am",
   paint: {

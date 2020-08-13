@@ -6,6 +6,7 @@ import {
   getMap,
   handleSidebar,
 } from "../../redux/actions/index";
+import { heatMap } from "./map/mapLayers";
 
 const axios = require("axios");
 const MapboxGeocoder = require("@mapbox/mapbox-gl-geocoder");
@@ -128,7 +129,7 @@ const ConnectedMap = ({
         handleSidebar(true);
         sideBar[0].classList.remove("--container-open");
         closeButton[0].classList.add("--closeButton-close");
-        setData([]);
+        
       }
     }
   }, [lat, lng, zoom]);
@@ -203,6 +204,7 @@ const ConnectedMap = ({
         });
         map.addLayer(meters);
         map.addLayer(places);
+        map.addLayer(heatMap);
       } else {
         map.removeLayer("places");
         map.removeSource("places");

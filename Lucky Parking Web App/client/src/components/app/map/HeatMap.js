@@ -121,13 +121,13 @@ const ConnectedMap = ({
     if (zoom >= 13) fetchData();
     if (mounted) {
       // The map removes the points on the map when the zoom level is less than 13
-      if (map.getSource("places") && zoom < 13) {
-        map.removeLayer("places");
+      if (map.getSource("places") && map.getLayer("places") && zoom < 13) {
+        // map.removeLayer("places");
         // map.removeSource("places");
-        map.removeLayer("meter");
-        map.removeSource("meter");
+        // map.removeLayer("meter");
+        // map.removeSource("meter");
         console.log(map.getSource("places"))
-        map.addLayer(heatMap);
+        // map.addLayer(heatMap);
         handleSidebar(true);
         sideBar[0].classList.remove("--container-open");
         closeButton[0].classList.add("--closeButton-close");
@@ -181,18 +181,24 @@ const ConnectedMap = ({
     map.once("render", () => {
       if (!map.getSource("places") && !map.getSource("meter")) {
         map.addSource("places", dataSources);
+        map.addSource("heat", dataSources);
         map.addSource("meter", {
           type: "vector",
           url: "mapbox://breeze094.bqlt7yn4",
         });
+        map.addLayer(heatMap);
         map.addLayer(meters);
         map.addLayer(places);
       } else {
         map.removeLayer("places");
         map.removeSource("places");
+        map.removeLayer("heat");
+        map.removeSource("heat");
 
         map.addSource("places", dataSources);
         map.addLayer(places);
+        map.addSource("heat", dataSources);
+        map.addLayer(heatMap);
       }
 
       map.on("click", "places", (e) => {
