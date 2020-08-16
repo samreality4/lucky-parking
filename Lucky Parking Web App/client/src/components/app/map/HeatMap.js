@@ -7,7 +7,7 @@ import {
   handleSidebar,
 } from "../../../redux/actions/index";
 
-import {heatMap, places, meters} from "./mapLayers";
+import { heatMap, places, meters } from "./mapLayers";
 
 const axios = require("axios");
 const MapboxGeocoder = require("@mapbox/mapbox-gl-geocoder");
@@ -51,7 +51,7 @@ const ConnectedMap = ({
   const closeButtonHandle = document.getElementsByClassName(
     "sidebar__closeButton"
   );
-  
+
   //first mounted
   useEffect(() => {
     setMap(
@@ -100,12 +100,15 @@ const ConnectedMap = ({
         });
 
         setZoom((preZoom) => {
-          if(Math.abs(Math.abs(preZoom) - Math.abs(map.getZoom().toFixed(2))) >=.50){
+          if (
+            Math.abs(Math.abs(preZoom) - Math.abs(map.getZoom().toFixed(2))) >=
+            0.5
+          ) {
             return map.getZoom().toFixed(2);
-          } else{
+          } else {
             return preZoom;
           }
-        })
+        });
       });
 
       const geocoder = new MapboxGeocoder({
@@ -118,20 +121,26 @@ const ConnectedMap = ({
   }, [mounted]);
 
   useEffect(() => {
-    if (zoom >= 13) fetchData();
+    if (zoom >= 13) {fetchData();}else{
+    }
     if (mounted) {
       // The map removes the points on the map when the zoom level is less than 13
-      if (map.getSource("places") && map.getLayer("places") && zoom < 13) {
-        // map.removeLayer("places");
-        // map.removeSource("places");
-        // map.removeLayer("meter");
-        // map.removeSource("meter");
-        console.log(map.getSource("places"))
-        // map.addLayer(heatMap);
+      var heatVisibility = map.getLayoutProperty("heat", "visibility");
+      var meterVisibility = map.getLayoutProperty("places", "visibility");
+      var placesVisibility = map.getLayoutProperty("meter", "visibility");
+
+      if (
+        heatVisibility === "none" &&
+        meterVisibility === "visible" &&
+        placesVisibility === "visible" &&
+        zoom < 13
+      ) {
+        map.setLayoutProperty("places", "visibility", "none");
+        map.setLayoutProperty("meters", "visibility", "none");
+        map.setLayoutProperty("heat", "visibility", "visible");
         handleSidebar(true);
         sideBar[0].classList.remove("--container-open");
         closeButton[0].classList.add("--closeButton-close");
-        setData([]);
       }
     }
   }, [lat, lng, zoom]);
