@@ -18,7 +18,7 @@ export const heatMap = {
     "heatmap-intensity": {
       stops: [
         [11, 1],
-        [15, 3],
+        [13, 3],
       ],
     },
     // assign color values be applied to points depending on their density
@@ -41,21 +41,21 @@ export const heatMap = {
     "heatmap-radius": {
       stops: [
         [11, 15],
-        [15, 20],
+        [13, 20],
       ],
     },
     // decrease opacity to transition into the circle layer
     "heatmap-opacity": {
       default: 1,
       stops: [
-        [14, 1],
-        [15, 0],
+        [13, 1],
+        [14, 0],
       ],
     },
   },
 };
 
-////Place Layer////
+////Places Layer////
 export const places = {
   id: "places",
   type: "symbol",

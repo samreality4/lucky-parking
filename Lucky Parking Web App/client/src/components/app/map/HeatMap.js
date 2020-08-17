@@ -52,6 +52,7 @@ const ConnectedMap = ({
     "sidebar__closeButton"
   );
 
+
   //first mounted
   useEffect(() => {
     setMap(
@@ -62,6 +63,7 @@ const ConnectedMap = ({
         zoom: zoom,
       })
     );
+    fetchData();
     setMounted(true);
   }, []);
 
@@ -102,7 +104,7 @@ const ConnectedMap = ({
         setZoom((preZoom) => {
           if (
             Math.abs(Math.abs(preZoom) - Math.abs(map.getZoom().toFixed(2))) >=
-            0.5
+            1
           ) {
             return map.getZoom().toFixed(2);
           } else {
@@ -121,29 +123,17 @@ const ConnectedMap = ({
   }, [mounted]);
 
   useEffect(() => {
-    if (zoom >= 13) {fetchData();}else{
-    }
     if (mounted) {
-      // The map removes the points on the map when the zoom level is less than 13
-      var heatVisibility = map.getLayoutProperty("heat", "visibility");
-      var meterVisibility = map.getLayoutProperty("places", "visibility");
-      var placesVisibility = map.getLayoutProperty("meter", "visibility");
-
-      if (
-        heatVisibility === "none" &&
-        meterVisibility === "visible" &&
-        placesVisibility === "visible" &&
-        zoom < 13
-      ) {
-        map.setLayoutProperty("places", "visibility", "none");
-        map.setLayoutProperty("meters", "visibility", "none");
-        map.setLayoutProperty("heat", "visibility", "visible");
+      //  fetchData();
+      if (zoom < 13) {
+        map.removeLayer("meters");
+        map.removeSource("meters");
         handleSidebar(true);
         sideBar[0].classList.remove("--container-open");
         closeButton[0].classList.add("--closeButton-close");
       }
     }
-  }, [lat, lng, zoom]);
+  }, [lat, lng]);
 
   function fetchData() {
     axios
@@ -151,6 +141,7 @@ const ConnectedMap = ({
         params: {
           longitude: lng,
           latitude: lat,
+          zoom: zoom,
         },
       })
       .then((data) => {
@@ -161,7 +152,7 @@ const ConnectedMap = ({
       });
   }
 
-  function updateMap() {
+  function dataToGeoJson(data){
     let dataSources = {
       type: "geojson",
       data: {
@@ -186,12 +177,17 @@ const ConnectedMap = ({
     );
 
     dataSources.data.features = dataFeatures;
+    return dataSources;
+  }
+
+  function updateMap() {
+    let dataSources = dataToGeoJson(data);
 
     map.once("render", () => {
-      if (!map.getSource("places") && !map.getSource("meter")) {
+      if (!map.getSource("places") && !map.getSource("meters")) {
         map.addSource("places", dataSources);
         map.addSource("heat", dataSources);
-        map.addSource("meter", {
+        map.addSource("meters", {
           type: "vector",
           url: "mapbox://breeze094.bqlt7yn4",
         });
