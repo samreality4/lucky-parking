@@ -126,8 +126,8 @@ const ConnectedMap = ({
     if (mounted) {
       //  fetchData();
       if (zoom < 13) {
-        map.removeLayer("meters");
-        map.removeSource("meters");
+        // map.removeLayer("meters");
+        // map.removeSource("meters");
         handleSidebar(true);
         sideBar[0].classList.remove("--container-open");
         closeButton[0].classList.add("--closeButton-close");
